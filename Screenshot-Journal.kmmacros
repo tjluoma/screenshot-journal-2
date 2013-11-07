@@ -142,7 +142,7 @@ If you are comfortable using Keyboard Maestro, this one is highly configurable. 
 								<key>MacroActionType</key>
 								<string>SetVariableToText</string>
 								<key>Text</key>
-								<string>%ICUDateTime%HH.mm.ss%.%Application%1% (No Window) %Application%2%</string>
+								<string>%ICUDateTime%HH.mm.ss%.%Application%1% (No Window)</string>
 								<key>Variable</key>
 								<string>SC_FILENAME</string>
 							</dict>
@@ -163,7 +163,7 @@ If you are comfortable using Keyboard Maestro, this one is highly configurable. 
 								<key>MacroActionType</key>
 								<string>SetVariableToText</string>
 								<key>Text</key>
-								<string>%ICUDateTime%HH.mm.ss%.%Application%1% (%WindowName%1%) %Application%2%</string>
+								<string>%ICUDateTime%HH.mm.ss%.%Application%1% (%WindowName%1%)</string>
 								<key>Variable</key>
 								<string>SC_FILENAME</string>
 							</dict>
@@ -583,7 +583,7 @@ We create an empty file and add the word "idle" at the end of the filename so we
 				<key>IsActive</key>
 				<true/>
 				<key>ModificationDate</key>
-				<real>405483692.56502599</real>
+				<real>405496843.55299997</real>
 				<key>Name</key>
 				<string>Screenshot Journal</string>
 				<key>Triggers</key>
