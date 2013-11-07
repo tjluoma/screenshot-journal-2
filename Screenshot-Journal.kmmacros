@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Activate</key>
+		<string>Normal</string>
+		<key>IsActive</key>
+		<true/>
+		<key>Macros</key>
+		<array>
+			<dict>
+				<key>Actions</key>
+				<array>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>NOTE: You should not _need_ to change this variable, but if you want to change where the images are saved, this is the variable to change. See also SC_FOLDER, below.
+
+SC_PARENT = Screen Capture Parent Folder = this is the main folder into which sub-folders will be created. By default this is "~/Pictures/screenshot-journal/" but you can change it to anything you want. THIS PATH MUST BE COMPLETE! However you can use ~/ to refer to your $HOME directory.
+
+IMPORTANT: This folder will be created, if needed, but its "parent" folder will not. For example: if you set this to ~/Pictures/screenshot-journal/ then Keyboard Maestro will create "~/Pictures/screenshot-journal/" but ONLY IF the folder ~/Pictures/ already exists. This should only be a problem if you decide to use something like ~/Pictures/AnotherFolder/screenshot-journal/ in which case you would need to make sure that ~/Pictures/AnotherFolder/ already exists. Got it? If not, just ask!
+
+WHEN IN DOUBT: Create the folder(s) you want to use manually, and then let Keyboard Maestro handle creating the sub-folder using the SC_FOLDER variable.</string>
+						<key>Title</key>
+						<string>SC_PARENT</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>SetVariableToText</string>
+						<key>Text</key>
+						<string>~/Pictures/screenshot-journal/</string>
+						<key>Variable</key>
+						<string>SC_PARENT</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>NOTE: You should not _need_ to change this variable, but if you want to change where the images are saved, this is the variable to change. See also SC_PARENT, above.
+
+DEFINITION AND SUMMARY EXPLANATION: 
+SC_FOLDER = Screen Capture Folder = this is a sub-folder of SC_PARENT.  By default, it will be today's date in YYYY-MM-DD format, so, for example, March 28th would be 2013-03-28.
+
+Assuming that SC_PARENT is left as the default ~/Pictures/screenshot-journal/, all of the images from March 28th would be saved to ~/Pictures/screenshot-journal/2013-03-28.
+
+This folder will be created if needed.
+
+You _could_ change this to something else if you wanted to, but I'm not sure why you'd want to. If you do, you should probably change SC_FILENAME to start with the date so you can sort them in the Finder (or elsewhere).
+
+WHEN IN DOUBT: Leave this one alone. Change SC_PARENT if you want to move where images are stored, and then make sure that the folder/directory defined in SC_PARENT actually exists.</string>
+						<key>Title</key>
+						<string>SC_FOLDER</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>SetVariableToText</string>
+						<key>Text</key>
+						<string>%ICUDateTime%yyyy-MM-dd%</string>
+						<key>Variable</key>
+						<string>SC_FOLDER</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>NOTE: You do not need to change this variable, but if you want to change the automatically-generated-names of the files located inside SC_FOLDER (which is located inside SC_PARENT), then you should change 
+
+DEFINITION AND SUMMARY EXPLANATION: 
+SC_FILENAME = Screen Capture Filename = this is what the actual filenames will be called when they are created inside the folder SC_FOLDER which is inside the folder SC_PARENT.
+
+By default, this is set to:
+
+%ICUDateTime%HH.mm.ss%.%Application%1% (%WindowName%1%) %Application%2%
+
+%ICUDateTime%HH.mm.ss% = hour.minute.second (where 1pm = 13)
+
+%Application%1% = The currently active application name
+
+(%WindowName%1%) = The name of the front window from the current app (shown in parenthesis for easier visual scanning in Finder)
+
+%Application%2% = the application that you were using before you started using this one.
+
+NOTE THAT THERE IS NO FILENAME EXTENSION SPECIFIED. THAT IS NOT AN ACCIDENT.
+
+WHEN IN DOUBT: Leave this one alone. If you do not want the application and window information, set SC_FILENAME to
+
+%ICUDateTime%HH.mm.ss%
+
+If you are comfortable using Keyboard Maestro, this one is highly configurable. See the "Insert Token" option in Keyboard Maestro's "Set Variable to Text" action.
+</string>
+						<key>Title</key>
+						<string>SC_FILENAME</string>
+					</dict>
+					<dict>
+						<key>Conditions</key>
+						<dict>
+							<key>ConditionList</key>
+							<array>
+								<dict>
+									<key>ConditionType</key>
+									<string>FrontWindow</string>
+									<key>FrontWindowConditionType</key>
+									<string>Exists</string>
+									<key>FrontWindowTitle</key>
+									<string></string>
+									<key>IsFrontApplication</key>
+									<true/>
+								</dict>
+							</array>
+							<key>ConditionListMatch</key>
+							<string>All</string>
+						</dict>
+						<key>ElseActions</key>
+						<array>
+							<dict>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>SetVariableToText</string>
+								<key>Text</key>
+								<string>%ICUDateTime%HH.mm.ss%.%Application%1% (No Window) %Application%2%</string>
+								<key>Variable</key>
+								<string>SC_FILENAME</string>
+							</dict>
+						</array>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>IfThenElse</string>
+						<key>ThenActions</key>
+						<array>
+							<dict>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>SetVariableToText</string>
+								<key>Text</key>
+								<string>%ICUDateTime%HH.mm.ss%.%Application%1% (%WindowName%1%) %Application%2%</string>
+								<key>Variable</key>
+								<string>SC_FILENAME</string>
+							</dict>
+						</array>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>SC_FILENAME cannot have any "/" or ":" or "\" characters in it, so we run three "Search and Replace" processes to change any occurrences of them to "-" instead.
+
+Note that as of v 6.2, Keyboard Maestro will silently fail to write a file if an "illegal" character like / is in the filename.
+</string>
+						<key>Title</key>
+						<string>Search and Replace (3x)</string>
+					</dict>
+					<dict>
+						<key>Action</key>
+						<string>IgnoreCaseString</string>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>SearchReplaceVariable</string>
+						<key>Replace</key>
+						<string>-</string>
+						<key>Search</key>
+						<string>/</string>
+						<key>Variable</key>
+						<string>SC_FILENAME</string>
+					</dict>
+					<dict>
+						<key>Action</key>
+						<string>IgnoreCaseString</string>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>SearchReplaceVariable</string>
+						<key>Replace</key>
+						<string>-</string>
+						<key>Search</key>
+						<string>\</string>
+						<key>Variable</key>
+						<string>SC_FILENAME</string>
+					</dict>
+					<dict>
+						<key>Action</key>
+						<string>IgnoreCaseString</string>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<false/>
+						<key>MacroActionType</key>
+						<string>SearchReplaceVariable</string>
+						<key>Replace</key>
+						<string>-</string>
+						<key>Search</key>
+						<string>:</string>
+						<key>Variable</key>
+						<string>SC_FILENAME</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>This will create the folder defined (above) as "SC_PARENT". By default this is ~/Pictures/screenshot-journal/ Keyboard Maestro will create it if it does not exist. If it already exists, Keyboard Maestro will just continue on.
+
+IMPORTANT: If nothing seems to happen when you run this Keyboard Maestro macro, try creating this folder manually.</string>
+						<key>Title</key>
+						<string>Create New Folder: %Variable%SC_PARENT%</string>
+					</dict>
+					<dict>
+						<key>Destination</key>
+						<string>%Variable%SC_PARENT%</string>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>NewFolder</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>Keyboard Maestro 6.2 can only create one folder level at a time, so after we create SC_PARENT now we have to create SC_FOLDER </string>
+						<key>Title</key>
+						<string>Create New Folder: %Variable%SC_PARENT%/%Variable%SC_FOLDER%</string>
+					</dict>
+					<dict>
+						<key>Destination</key>
+						<string>%Variable%SC_PARENT%/%Variable%SC_FOLDER%</string>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>NewFolder</string>
+					</dict>
+					<dict>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>Comment</string>
+						<key>Text</key>
+						<string>The "If / Then" block below determines exactly what is done, based on current conditions. See comments below for more details.</string>
+						<key>Title</key>
+						<string>HERE'S WHERE WE ACTUALLY DO STUFF!</string>
+					</dict>
+					<dict>
+						<key>Conditions</key>
+						<dict>
+							<key>ConditionList</key>
+							<array>
+								<dict>
+									<key>ConditionType</key>
+									<string>Calculation</string>
+									<key>Text</key>
+									<string>SCREENSAVER()</string>
+								</dict>
+								<dict>
+									<key>ConditionType</key>
+									<string>Calculation</string>
+									<key>Text</key>
+									<string>IDLE() &gt; 119</string>
+								</dict>
+							</array>
+							<key>ConditionListMatch</key>
+							<string>Any</string>
+						</dict>
+						<key>ElseActions</key>
+						<array>
+							<dict>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>Comment</string>
+								<key>Text</key>
+								<string>OK, if we get here then the screensaver is NOT on (and the screen IS on) AND we are not IDLE for more than the defined number of seconds.
+
+THAT MEANS WE ARE ACTIVE! YAY! Let's record what we are doing by taking a screenshot!
+
+Note that we have to do this in 2 steps:
+
+1. Save the screenshot to a clipboard
+2. Write the contents of the clipboard to a file
+
+We use a "named" clipboard for Step #1 so we don't overwrite the system clipboard. The clipboard we use is named SCREENCAPTURE.
+
+If you use more than one screen, this will capture all of them</string>
+								<key>Title</key>
+								<string>!! ELSE !!</string>
+							</dict>
+							<dict>
+								<key>DestinationNamedClipboardRedundantDisplayName</key>
+								<string>SCREENCAPTURE</string>
+								<key>DestinationNamedClipboardUID</key>
+								<string>0BA631FC-7556-4B39-8D52-6DE3D3418D5E</string>
+								<key>DestinationUseNamedClipboard</key>
+								<true/>
+								<key>IncludeShadows</key>
+								<true/>
+								<key>Index</key>
+								<string>2</string>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>ScreenCapture</string>
+								<key>Source</key>
+								<string>ScreenAll</string>
+								<key>WindowName</key>
+								<string></string>
+							</dict>
+							<dict>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>Comment</string>
+								<key>Text</key>
+								<string>OK, so we have saved a screenshot of our monitor(s) to a special clipboard named SCREENCAPTURE, and now we need to save the contents of that clipboard to a file.
+
+You have several options for image formats. I chose GIF because it creates MUCH smaller files than JPG or PNG. For example, in my test with my MacBook Pro hooked to an external monitor, the GIF was 256 KB, the JPG was 586 KB, and the PNG was 708 KB!</string>
+								<key>Title</key>
+								<string>Write Named Clipboard to File</string>
+							</dict>
+							<dict>
+								<key>Append</key>
+								<false/>
+								<key>Destination</key>
+								<string>%Variable%SC_PARENT%/%Variable%SC_FOLDER%/%Variable%SC_FILENAME%.gif</string>
+								<key>Encoding</key>
+								<string>UTF8</string>
+								<key>Format</key>
+								<string>GIF</string>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>WriteFile</string>
+								<key>Name</key>
+								<string>0BA631FC-7556-4B39-8D52-6DE3D3418D5E</string>
+								<key>RedundandDisplayName</key>
+								<string>SCREENCAPTURE</string>
+								<key>Source</key>
+								<string>NamedClipboard</string>
+								<key>Text</key>
+								<string></string>
+								<key>Variable</key>
+								<string>Variable</string>
+							</dict>
+						</array>
+						<key>IsActive</key>
+						<true/>
+						<key>IsDisclosed</key>
+						<true/>
+						<key>MacroActionType</key>
+						<string>IfThenElse</string>
+						<key>ThenActions</key>
+						<array>
+							<dict>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>Comment</string>
+								<key>Text</key>
+								<string>This condition says that IF the screensaver is on OR if the computer has been IDLE for more than 119 seconds, then go into this section. OTHERWISE, go into the "ELSE" section below.
+
+See note under SCREENSAVER() below</string>
+								<key>Title</key>
+								<string>SCREENSAVER() or IDLE() &gt; 119</string>
+							</dict>
+							<dict>
+								<key>Conditions</key>
+								<dict>
+									<key>ConditionList</key>
+									<array>
+										<dict>
+											<key>ConditionType</key>
+											<string>Calculation</string>
+											<key>Text</key>
+											<string>SCREENSAVER()</string>
+										</dict>
+									</array>
+									<key>ConditionListMatch</key>
+									<string>All</string>
+								</dict>
+								<key>ElseActions</key>
+								<array>
+									<dict>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>Comment</string>
+										<key>Text</key>
+										<string>If we get here, then we tested for two conditions: either A) the screensaver is on, or B) the IDLE time has been exceeded, and then we further tested and found that the screensaver is not on, THEREFORE we must be idle.
+
+Note this tip from http://www.keyboardmaestro.com/documentation/6/calculations.html
+
+"IDLE time is based on the Human Interface (HID) system, and so notices only HID device activity like mouse movement or keyboard presses, not things like disk access or movies playing."
+
+By default this macro will run once a minute, so if we have been idle (no mouse or keyboard) in more than 119 seconds (aka 2 minutes) then we don't need to take another screenshot because it seems unlikely that the screen has changed in any significant ways.
+
+This also prevents the script from taking screenshots if you are watching Netflix or something via VLC, etc.
+
+We create an empty file and add the word "idle" at the end of the filename so we know why the file is empty instead of being a screenshot.</string>
+										<key>Title</key>
+										<string>If IDLE, then Write Text To File (Create Empty File)</string>
+									</dict>
+									<dict>
+										<key>Append</key>
+										<false/>
+										<key>Destination</key>
+										<string>%Variable%SC_PARENT%/%Variable%SC_FOLDER%/%Variable%SC_FILENAME%.idle.txt</string>
+										<key>Encoding</key>
+										<string>UTF8</string>
+										<key>Format</key>
+										<string>PlainText</string>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>WriteFile</string>
+										<key>Name</key>
+										<string>C5768098-138D-4E9C-BE57-5128CBA7DFE6</string>
+										<key>RedundandDisplayName</key>
+										<string>Default Clipboard</string>
+										<key>Source</key>
+										<string>Text</string>
+										<key>Text</key>
+										<string></string>
+										<key>Variable</key>
+										<string>Variable</string>
+									</dict>
+								</array>
+								<key>IsActive</key>
+								<true/>
+								<key>IsDisclosed</key>
+								<true/>
+								<key>MacroActionType</key>
+								<string>IfThenElse</string>
+								<key>ThenActions</key>
+								<array>
+									<dict>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>Comment</string>
+										<key>Text</key>
+										<string>{Comment About The Above}: If the screen is turned OFF (either via Energy Saver or "Hot Corner"), then that is considered the same as the screensaver being ON. That is good for us as we want to do the same thing under either condition here.</string>
+										<key>Title</key>
+										<string>{Above} SCREENSAVER() = True if the screensaver is ON or if the screen is powered OFF</string>
+									</dict>
+									<dict>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>Comment</string>
+										<key>Text</key>
+										<string>{Comment About The Below} - SC_FILENAME does not need to mention the current or previous application if the screensaver is active, so we re-define SC_FILENAME to just include the time.</string>
+										<key>Title</key>
+										<string>{Below} Simplify SC_FILENAME</string>
+									</dict>
+									<dict>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>SetVariableToText</string>
+										<key>Text</key>
+										<string>%ICUDateTime%HH.mm.ss%</string>
+										<key>Variable</key>
+										<string>SC_FILENAME</string>
+									</dict>
+									<dict>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>Comment</string>
+										<key>Text</key>
+										<string>If the screensaver is on (or screen is off, as explained above), then we do not take a screenshot, because that would just be a waste of space. So instead we create an empty file and add the word "screensaver" at the end so we know why the file is empty instead of being a screenshot.</string>
+										<key>Title</key>
+										<string>If Screensaver, then Write Text To File (Create Empty File)</string>
+									</dict>
+									<dict>
+										<key>Append</key>
+										<false/>
+										<key>Destination</key>
+										<string>%Variable%SC_PARENT%/%Variable%SC_FOLDER%/%Variable%SC_FILENAME%.screensaver.txt</string>
+										<key>Encoding</key>
+										<string>UTF8</string>
+										<key>Format</key>
+										<string>PlainText</string>
+										<key>IsActive</key>
+										<true/>
+										<key>IsDisclosed</key>
+										<true/>
+										<key>MacroActionType</key>
+										<string>WriteFile</string>
+										<key>Name</key>
+										<string>C5768098-138D-4E9C-BE57-5128CBA7DFE6</string>
+										<key>RedundandDisplayName</key>
+										<string>Default Clipboard</string>
+										<key>Source</key>
+										<string>Text</string>
+										<key>Text</key>
+										<string></string>
+										<key>Variable</key>
+										<string>Variable</string>
+									</dict>
+								</array>
+								<key>TimeOutAbortsMacro</key>
+								<true/>
+							</dict>
+						</array>
+						<key>TimeOutAbortsMacro</key>
+						<true/>
+					</dict>
+				</array>
+				<key>IsActive</key>
+				<true/>
+				<key>ModificationDate</key>
+				<real>405483692.56502599</real>
+				<key>Name</key>
+				<string>Screenshot Journal</string>
+				<key>Triggers</key>
+				<array>
+					<dict>
+						<key>FireType</key>
+						<string>Pressed</string>
+						<key>KeyCode</key>
+						<integer>20</integer>
+						<key>MacroTriggerType</key>
+						<string>HotKey</string>
+						<key>Modifiers</key>
+						<integer>2560</integer>
+					</dict>
+					<dict>
+						<key>ExecuteType</key>
+						<string>While</string>
+						<key>MacroTriggerType</key>
+						<string>Time</string>
+						<key>Repeat</key>
+						<true/>
+						<key>RepeatTime</key>
+						<integer>60</integer>
+						<key>TimeFinishHour</key>
+						<integer>23</integer>
+						<key>TimeFinishMinutes</key>
+						<integer>0</integer>
+						<key>TimeHour</key>
+						<integer>6</integer>
+						<key>TimeMinutes</key>
+						<integer>30</integer>
+						<key>WhichDays</key>
+						<integer>127</integer>
+					</dict>
+					<dict>
+						<key>FireType2</key>
+						<string>Activate</string>
+						<key>MacroTriggerType</key>
+						<string>Application</string>
+						<key>RepeatTime</key>
+						<integer>60</integer>
+						<key>Target</key>
+						<string>Front</string>
+					</dict>
+				</array>
+				<key>UID</key>
+				<string>F841FC38-6228-4C5F-9230-274C5B64C955</string>
+			</dict>
+		</array>
+		<key>Name</key>
+		<string>Global Macro Group</string>
+		<key>UID</key>
+		<string>DA8512F7-F323-46B1-8319-752E0495CFD0</string>
+	</dict>
+</array>
+</plist>
